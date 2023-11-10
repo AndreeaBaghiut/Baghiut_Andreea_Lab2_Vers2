@@ -5,5 +5,6 @@
         public int ID { get; set; }
         public string CategoryName { get; set; }
         public ICollection<BookCategory>? BookCategories { get; set; }
+        public ICollection<Book>? Books; //=> BookCategories?.Select(bc => bc.Book).ToList();
     }
 }

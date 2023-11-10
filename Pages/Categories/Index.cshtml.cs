@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Baghiut_Andreea_Lab2.Data;
 using Baghiut_Andreea_Lab2.Models;
+using Baghiut_Andreea_Lab2.Models.ViewModels;
 
 namespace Baghiut_Andreea_Lab2.Pages.Categories
 {
@@ -21,12 +22,31 @@ namespace Baghiut_Andreea_Lab2.Pages.Categories
 
         public IList<Category> Category { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public CategoryIndexData CategoryData { get; set; }
+        public int CategoriesID { get; set; }
+        public int BookID { get; set; }
+
+
+        public async Task OnGetAsync(int? id, int? bookID)
         {
-            if (_context.Category != null)
+            CategoryData = new CategoryIndexData();
+
+            CategoryData.Categories = await _context.Category
+                .Include(i => i.BookCategories)
+                    .ThenInclude(bc => bc.Book)
+                        .ThenInclude(b => b.Author)
+                .AsNoTracking()
+                .OrderBy(c => c.CategoryName)
+                .ToListAsync();
+
+            if (id != null)
             {
-                Category = await _context.Category.ToListAsync();
+                CategoriesID = id.Value;
+                Category category = CategoryData.Categories
+                    .Where(c => c.ID == id.Value).Single();
+                CategoryData.Books = category.BookCategories.Select(bc => bc.Book).ToList();
             }
         }
+
     }
 }
