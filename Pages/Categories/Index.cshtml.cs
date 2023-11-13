@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Baghiut_Andreea_Lab2.Data;
 using Baghiut_Andreea_Lab2.Models;
 using Baghiut_Andreea_Lab2.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Baghiut_Andreea_Lab2.Pages.Categories
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         private readonly Baghiut_Andreea_Lab2.Data.Baghiut_Andreea_Lab2Context _context;

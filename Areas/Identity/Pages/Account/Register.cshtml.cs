@@ -134,6 +134,7 @@ _context;
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account withpassword.");
+                var role = await _userManager.AddToRoleAsync(user, "User");
                 var userId = await _userManager.GetUserIdAsync(user);
                 var code = await
                _userManager.GenerateEmailConfirmationTokenAsync(user);
